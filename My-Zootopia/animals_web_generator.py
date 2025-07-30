@@ -6,9 +6,8 @@ def load_data(file_path):
         return json.load(handle)
 
 # --- Configuration ---
-# Make sure these filenames match your actual files
 JSON_FILE_PATH = 'animals_data.json'  # Updated filename
-TEMPLATE_FILE_PATH = 'animals_template.html'     # Make sure this file exists
+TEMPLATE_FILE_PATH = 'animals_template.html'  # Make sure this file exists
 OUTPUT_FILE_PATH = 'animals.html'
 PLACEHOLDER = '__REPLACE_ANIMALS_INFO__'
 # --- End Configuration ---
@@ -16,32 +15,36 @@ PLACEHOLDER = '__REPLACE_ANIMALS_INFO__'
 # 1. Load the animal data from JSON
 animals_data = load_data(JSON_FILE_PATH)
 
-# 2. Generate the string with animals' data in HTML format
+# 2. Generate the string with animals' data in the NEW HTML format
 animals_info_string = ''  # define an empty string to accumulate HTML data
 
 for animal in animals_data:
     # Start the list item for this animal
     animals_info_string += '<li class="cards__item">\n'
 
-    # Add Name
-    animals_info_string += f"Name: {animal['name']}<br/>\n"
+    # Add the title div
+    animals_info_string += f'  <div class="card__title">{animal["name"]}</div>\n'
+
+    # Start the text paragraph
+    animals_info_string += '  <p class="card__text">\n'
 
     # Add Diet (from characteristics)
     diet = animal.get('characteristics', {}).get('diet')
     if diet:
-        animals_info_string += f"Diet: {diet}<br/>\n"
+        animals_info_string += f'      <strong>Diet:</strong> {diet}<br/>\n'
 
     # Add the first Location
     locations = animal.get('locations', [])
     if locations:
-        animals_info_string += f"Location: {locations[0]}<br/>\n"
+        animals_info_string += f'      <strong>Location:</strong> {locations[0]}<br/>\n'
 
     # Add Type (from characteristics)
     animal_type = animal.get('characteristics', {}).get('type')
     if animal_type:
-        animals_info_string += f"Type: {animal_type}<br/>\n"
+        animals_info_string += f'      <strong>Type:</strong> {animal_type}<br/>\n'
 
-    # Close the list item for this animal
+    # Close the text paragraph and the list item
+    animals_info_string += '  </p>\n'
     animals_info_string += '</li>\n'
 
 # 3. Read the content of the template
@@ -60,3 +63,4 @@ with open(OUTPUT_FILE_PATH, "w") as output_file:
     output_file.write(final_html_content)
 
 print(f"Generated {OUTPUT_FILE_PATH} successfully!")
+
